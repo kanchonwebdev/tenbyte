@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { configDotenv } from 'dotenv';
-
-configDotenv();
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,10 +29,12 @@ export default function LoginPage() {
 
         axios(config)
             .then(function (response) {
-                console.log(response);
+                Cookies.set('token', response.data.access_token, { expires: 1/288, secure: true, sameSite: 'strict' });
+                Cookies.set('refresh_token', response.data.refresh_token, { expires: 5, secure: true, sameSite: 'strict' });
+                router.push('/dashboard');
             })
             .catch(function (error) {
-                console.log(error.response.data);
+                console.log(error.response?.data || error);
             });
     };
 

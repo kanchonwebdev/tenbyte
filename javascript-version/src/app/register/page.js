@@ -4,6 +4,9 @@ import { useState } from 'react'; // Import useState from React from 'react';
 import axios from 'axios';
 import { configDotenv } from 'dotenv';
 
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+
 configDotenv();
 
 export default function RegisterPage() {
@@ -12,6 +15,7 @@ export default function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [newsletter, setNewsletter] = useState(false);
+    const router = useRouter();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -35,15 +39,18 @@ export default function RegisterPage() {
 
         axios(config)
             .then(function (response) {
-                console.log(response);
+                console.log(response.data);
+                Cookies.set('token', response.data.access_token, { expires: 1 / 288, secure: true, sameSite: 'strict' });
+                Cookies.set('refresh_token', response.data.refresh_token, { expires: 5, secure: true, sameSite: 'strict' });
+                router.push('/dashboard');
             })
             .catch(function (error) {
-                console.log(error.response.data);
-         });
+                console.log(error.response?.data || error);
+            });
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">    
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <h1 className="text-3xl font-bold mb-4">Register Page</h1>
             <form className="w-full max-w-sm" onSubmit={handleSubmit}>
                 <div className="mb-4">
