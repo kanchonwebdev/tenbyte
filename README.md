@@ -23,5 +23,6 @@ Tools:
 ## Feature haven't implement due to short time
 * React hook form.
 * State management library.
+* Professional git use.
 
 
