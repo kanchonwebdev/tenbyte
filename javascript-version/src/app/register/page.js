@@ -1,15 +1,30 @@
 'use client';
 
-import { useState } from 'react'; // Import useState from React from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { configDotenv } from 'dotenv';
 
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
-configDotenv();
+import { Button } from "@/components/ui/button"
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import Image from "next/image"
+import FrameImage from "../../../public/frame.png"
+import HeroImg from "../../../public/hero.png"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
-export default function RegisterPage() {
+export default function DuplicateRegisterPage() {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [email, setEmail] = useState('');
@@ -39,7 +54,6 @@ export default function RegisterPage() {
 
         axios(config)
             .then(function (response) {
-                console.log(response.data);
                 Cookies.set('token', response.data.access_token, { expires: 1 / 288, secure: true, sameSite: 'strict' });
                 Cookies.set('refresh_token', response.data.refresh_token, { expires: 5, secure: true, sameSite: 'strict' });
                 router.push('/dashboard');
@@ -50,81 +64,127 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <h1 className="text-3xl font-bold mb-4">Register Page</h1>
-            <form className="w-full max-w-sm" onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstName">
-                        First Name
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="firstName"
-                        type="text"
-                        placeholder="Enter your first name"
-                        value={firstname}
-                        onChange={(e) => setFirstname(e.target.value)}
-                    />
+        <div>
+            <div className="w-full max-w-[1440px] mx-auto grid grid-cols-2 gap-4">
+                <div className="flex flex-col items-center justify-between bg-white dark:bg-gray-900 p-6">
+                    <div className="flex justify-start w-full">
+                        <div className="pt-4 pb-4">
+                            <Image
+                                className="dark:invert"
+                                src={FrameImage}
+                                alt="Next.js logo"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-center">
+                        <Card className="w-full max-w-[480px] mx-auto rounded-none border-none shadow-none">
+                            <CardHeader>
+                                <CardTitle className="text-2xl">Get Started with Vidinfra</CardTitle>
+                                <CardDescription>
+                                    Stream, host, and manage videos effortlessly!
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="flex flex-col gap-6">
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="firstname">Full Name</Label>
+
+                                            <ToggleGroup className="w-full shadow-none" variant="outline" type="multiple">
+                                                <ToggleGroupItem className="pl-0 pr-0 shadow-none">
+                                                    <Input
+                                                        id="firstname"
+                                                        type="text"
+                                                        placeholder="First Name"
+                                                        className="w-full border-none"
+                                                        value={firstname}
+                                                        onChange={(e) => setFirstname(e.target.value)}
+                                                        required
+                                                    />
+                                                </ToggleGroupItem>
+                                                <ToggleGroupItem className="pl-0 pr-0 shadow-none">
+                                                    <Input
+                                                        id="lastname"
+                                                        type="text"
+                                                        placeholder="Last Name"
+                                                        className="w-full border-none"
+                                                        value={lastname}
+                                                        onChange={(e) => setLastname(e.target.value)}
+                                                        required
+                                                    />
+                                                </ToggleGroupItem>
+                                            </ToggleGroup>
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="email">Email Address</Label>
+                                            <Input
+                                                id="email"
+                                                type="email"
+                                                placeholder="m@example.com"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <div className="flex items-center">
+                                                <Label htmlFor="password">Password</Label>
+                                            </div>
+                                            <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                                            <span className="text-sm text-muted-foreground">
+                                                Password must be 8+ chars & include special characters (e.g. @, #, $)
+                                            </span>
+                                        </div>
+
+                                        <div className="grid grid-2">
+                                            <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
+                                                Continue
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </CardContent>
+                            <CardFooter className="flex flex-col items-center justify-center gap-2">
+                                <span className="text-sm text-muted-foreground">
+                                    Or continue with
+                                </span>
+                            </CardFooter>
+                            <CardFooter className="flex-row items-center justify-center gap-2">
+                                <Button variant="outline">
+                                    Google
+                                </Button>
+                                <Button variant="outline">
+                                    Github
+                                </Button>
+                                <Button variant="outline">
+                                    Okta
+                                </Button>
+                            </CardFooter>
+                            <CardFooter className="flex flex-col items-center justify-center gap-2">
+                                <span className="text-sm text-muted-foreground">
+                                    Already have an account? <a href="#" className="text-purple-600 underline">Login</a>
+                                </span>
+                            </CardFooter>
+                        </Card>
+                    </div>
+
+                    <div>
+                        <span className="text-sm text-muted-foreground">
+                            By continuing, you agree to our <a href="#" className="text-purple-600 underline">Terms of Service</a> and <a href="#" className="text-purple-600 underline">Privacy Policy</a>.
+                        </span>
+                    </div>
                 </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lastName">
-                        Last Name
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="lastName"
-                        type="text"
-                        placeholder="Enter your last name"
-                        value={lastname}
-                        onChange={(e) => setLastname(e.target.value)}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                        Email
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="email"
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                        Password
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="password"
-                        type="password"
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="inline-flex items-center">
-                        <input
-                            type="checkbox"
-                            className="form-checkbox"
-                            checked={newsletter}
-                            onChange={e => setNewsletter(e.target.checked)}
+                <div>
+                    <div className="max-h-[100vh] h-full">
+                        <Image
+                            className="dark:invert h-full w-full object-cover"
+                            src={HeroImg}
+                            alt="Hero image"
                         />
-                        <span className="ml-2 text-gray-700">Receive Updates</span>
-                    </label>
+                    </div>
                 </div>
-                <div className="flex items-center justify-between">
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit"
-                    >
-                        Register
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     );
 }

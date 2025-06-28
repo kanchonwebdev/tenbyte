@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -8,12 +10,18 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import Image from "next/image"
 import FrameImage from "../../../public/frame.png"
 
-export default function DuplicateLoginPage() {
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
+import {
+    InputOTP,
+    InputOTPGroup,
+    InputOTPSlot,
+} from "@/components/ui/input-otp"
+
+
+export default function VerifyEmailPage() {
     return (
         <div>
             <div className="w-full max-w-[1440px] mx-auto">
@@ -31,30 +39,36 @@ export default function DuplicateLoginPage() {
                     <div className="flex items-center justify-center w-full">
                         <Card className="w-full max-w-[480px] mx-auto rounded-none border-none shadow-none">
                             <CardHeader>
-                                <CardTitle className="text-2xl">Create New Password</CardTitle>
+                                <CardTitle className="text-2xl">Verify Email</CardTitle>
                                 <CardDescription>
-                                    Set a new password to keep your account secure.
+                                    Enter the code sent to your email.
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <form>
+                                <form className="w-full">
                                     <div className="flex flex-col gap-6">
-                                        <div className="grid gap-2">
-                                            <div className="flex items-center">
-                                                <Label htmlFor="password">Password</Label>
-                                            </div>
-                                            <Input id="password" type="password" required />
-                                            <span className="text-sm text-muted-foreground">
-                                                Password must be 8+ chars & include special characters (e.g. @, #, $)
-                                            </span>
-                                        </div>
+                                        <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} className="w-full mx-auto">
+                                            <InputOTPGroup className="gap-5 items-center justify-center">
+                                                <InputOTPSlot index={0} className="rounded-xl border-2 shadow-none w-14 h-14" />
+                                                <InputOTPSlot index={1} className="rounded-xl border-2 shadow-none w-14 h-14" />
+                                                <InputOTPSlot index={2} className="rounded-xl border-2 shadow-none w-14 h-14" />
+                                                <InputOTPSlot index={3} className="rounded-xl border-2 shadow-none w-14 h-14" />
+                                                <InputOTPSlot index={4} className="rounded-xl border-2 shadow-none w-14 h-14" />
+                                                <InputOTPSlot index={5} className="rounded-xl border-2 shadow-none w-14 h-14" />
+                                            </InputOTPGroup>
+                                        </InputOTP>
                                     </div>
                                 </form>
                             </CardContent>
                             <CardFooter className="flex-row gap-2">
                                 <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
-                                    Set Password
+                                    Confirm OTP
                                 </Button>
+                            </CardFooter>
+                            <CardFooter className="flex flex-col items-center justify-center gap-2">
+                                <span className="text-sm text-muted-foreground">
+                                    Don't get a code? <a href="#" className="text-purple-600 underline">Resend</a>
+                                </span>
                             </CardFooter>
                         </Card>
                     </div>
